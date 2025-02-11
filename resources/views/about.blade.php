@@ -11,8 +11,15 @@
     <h1>Hello, {{ $name }}</h1>
     <form action="about" method="post">
         @csrf
-        <input type="text" name="name">
-        <button type="submit">Submit</button>
+
+        <input type="text" name="name" placeholder="Enter your name">
+        <select name="department" id="department">
+            @foreach ($departments as $key => $department)
+                <option value="{{ $key }}">{{ $department }}</option>
+            @endforeach
+
+        </select>
+        <input type="submit" value="Send">
     </form>
 </body>
 
