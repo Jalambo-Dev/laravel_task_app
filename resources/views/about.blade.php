@@ -9,6 +9,11 @@
 
 <body>
     <h1>Hello, {{ $name }}</h1>
+    <form action="about" method="post">
+        @csrf
+        <input type="text" name="name">
+        <button type="submit">Submit</button>
+    </form>
 </body>
 
 </html>

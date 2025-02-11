@@ -12,3 +12,9 @@ Route::get('/about', function () {
     // return view('about', ['name' => $name]);
     return view('about', compact('name'));
 });
+
+
+Route::post('/about', function () {
+    $name = $_POST['name'];
+    return view('about', compact('name'));
+});
