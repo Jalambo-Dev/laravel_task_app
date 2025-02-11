@@ -9,5 +9,6 @@ Route::get('/', function () {
 Route::get('/about', function () {
     $name = "Ahmed";
     // return view('about')->with('name', $name);
-    return view('about', ['name' => $name]);
+    // return view('about', ['name' => $name]);
+    return view('about', compact('name'));
 });
