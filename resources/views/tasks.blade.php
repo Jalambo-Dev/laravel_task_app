@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +24,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
 
@@ -107,14 +108,19 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Task Manager</h1>
-        
-        <div class="add-task">
-            <input type="text" placeholder="Add a new task...">
-            <button>Add Task</button>
-        </div>
+        <h1>TASK APP</h1>
+
+        <form action="create" method="POST">
+            @csrf
+            <div class="add-task">
+                <input type="text" name="title" placeholder="Add a new task...">
+                <button type="submit">Add Task</button>
+            </div>
+        </form>
+
 
         <div class="tasks">
             <div class="task">
@@ -132,4 +138,5 @@
         </div>
     </div>
 </body>
+
 </html>
