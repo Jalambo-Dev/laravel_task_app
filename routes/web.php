@@ -35,3 +35,7 @@ Route::post('/about', function () {
     $department = $departments[$departmentIndex];
     return view('about', compact('name', 'departments', 'department'));
 });
+
+Route::get('/tasks', function () {
+    return view('tasks');
+});
