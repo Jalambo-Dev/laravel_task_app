@@ -49,17 +49,20 @@
         }
 
         button {
-            background-color: #4CAF50;
-            color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
+            color: white;
         }
 
-        button:hover {
+        .add-btn {
+            background-color: #4CAF50;
+        }
+
+        .add-btn:hover {
             background-color: #45a049;
         }
 
@@ -83,14 +86,25 @@
             font-size: 16px;
         }
 
-        .task button {
-            background-color: #ff4444;
-            padding: 5px 10px;
-            font-size: 14px;
+        .task-actions {
+            display: flex;
+            gap: 5px;
         }
 
-        .task button:hover {
+        .delete-btn {
+            background-color: #ff4444;
+        }
+
+        .edit-btn {
+            background-color: #ffd344;
+        }
+
+        .delete-btn:hover {
             background-color: #cc0000;
+        }
+
+        .edit-btn:hover {
+            background-color: #ccb100;
         }
 
         @media (max-width: 480px) {
@@ -112,24 +126,40 @@
 <body>
     <div class="container">
         <h1>TASK APP</h1>
-
-        <form action="create" method="POST">
-            @csrf
-            <div class="add-task">
-                <input type="text" name="title" placeholder="Add a new task...">
-                <button type="submit">Add Task</button>
-            </div>
-        </form>
-
+        @if (isset($task))
+            <form action="{{ url('/update') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $task->id }}">
+                <div class="add-task">
+                    <input type="text" name="title" value="{{ $task->title }}" placeholder="Edit a task...">
+                    <button type="submit" class="add-btn">Update Task</button>
+                </div>
+            </form>
+        @else
+            <form action="create" method="POST">
+                @csrf
+                <div class="add-task">
+                    <input type="text" name="title" placeholder="Add a new task...">
+                    <button type="submit" class="add-btn">Add Task</button>
+                </div>
+            </form>
+        @endif
 
         <div class="tasks">
-
             @foreach ($tasks as $task)
-                <form action="/delete/{{ $task->id }}" method="POST" class="task">
-                    @csrf
+                <div class="task">
                     <span>{{ $task->title }}</span>
-                    <button type="submit">Delete</button>
-                </form>
+                    <div class="task-actions">
+                        <form action="{{ url('/edit/' . $task->id) }}" method="GET" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="edit-btn">Edit</button>
+                        </form>
+                        <form action="/delete/{{ $task->id }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                    </div>
+                </div>
             @endforeach
         </div>
     </div>
