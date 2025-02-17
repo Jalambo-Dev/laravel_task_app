@@ -38,7 +38,8 @@ Route::post('/about', function () {
 });
 
 Route::get('tasks', function () {
-    return view('tasks');
+    $tasks = DB::table('tasks')->get();
+    return view('tasks', compact('tasks'));
 });
 
 
@@ -47,5 +48,5 @@ Route::post('create', function () {
     DB::table(table: 'tasks')->insert(values: [
         'title' => $task_title
     ]);
-    return view('/tasks');
+    return redirect('/tasks');
 });

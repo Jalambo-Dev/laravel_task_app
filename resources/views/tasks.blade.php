@@ -123,18 +123,12 @@
 
 
         <div class="tasks">
-            <div class="task">
-                <span>Complete the project presentation</span>
-                <button>Delete</button>
-            </div>
-            <div class="task">
-                <span>Schedule team meeting</span>
-                <button>Delete</button>
-            </div>
-            <div class="task">
-                <span>Review code changes</span>
-                <button>Delete</button>
-            </div>
+            @foreach ($tasks as $task)
+                <div class="task">
+                    <span>{{ $task->title }}</span>
+                    <button>Delete</button>
+                </div>
+            @endforeach
         </div>
     </div>
 </body>
