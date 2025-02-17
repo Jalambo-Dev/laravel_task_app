@@ -123,11 +123,13 @@
 
 
         <div class="tasks">
+
             @foreach ($tasks as $task)
-                <div class="task">
+                <form action="/delete/{{ $task->id }}" method="POST" class="task">
+                    @csrf
                     <span>{{ $task->title }}</span>
-                    <button>Delete</button>
-                </div>
+                    <button type="submit">Delete</button>
+                </form>
             @endforeach
         </div>
     </div>

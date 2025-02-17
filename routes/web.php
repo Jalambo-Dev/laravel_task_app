@@ -51,3 +51,8 @@ Route::post('create', function () {
     // return redirect('/tasks');
     return redirect()->back();
 });
+
+Route::post('delete/{id}', function ($id) {
+    DB::table('tasks')->where('id', $id)->delete();
+    return redirect('/tasks');
+});
