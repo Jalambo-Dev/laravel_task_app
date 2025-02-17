@@ -48,5 +48,6 @@ Route::post('create', function () {
     DB::table(table: 'tasks')->insert(values: [
         'title' => $task_title
     ]);
-    return redirect('/tasks');
+    // return redirect('/tasks');
+    return redirect()->back();
 });
