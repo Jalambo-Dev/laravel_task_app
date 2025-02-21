@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h1>TASK LIST APP</h1>
+        <h1>TASK LIST</h1>
         <div class="offset-md-2 col-md-8">
             <!-- New Task Form -->
             <div class="card">
