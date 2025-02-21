@@ -1,168 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Laravel Quickstart - Basic</title>
+
+    <!-- Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
         body {
-            background-color: #f5f5f5;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .add-task {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        button {
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            color: white;
-        }
-
-        .add-btn {
-            background-color: #4CAF50;
-        }
-
-        .add-btn:hover {
-            background-color: #45a049;
-        }
-
-        .tasks {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .task {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background-color: #f8f8f8;
-            border-radius: 5px;
-            gap: 10px;
-        }
-
-        .task span {
-            flex: 1;
-            font-size: 16px;
-        }
-
-        .task-actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        .delete-btn {
-            background-color: #ff4444;
-        }
-
-        .edit-btn {
-            background-color: #ffd344;
-        }
-
-        .delete-btn:hover {
-            background-color: #cc0000;
-        }
-
-        .edit-btn:hover {
-            background-color: #ccb100;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-
-            .add-task {
-                flex-direction: column;
-            }
-
-            .add-task button {
-                width: 100%;
-            }
+            font-family: 'Lato';
         }
     </style>
 </head>
+<body id="app-layout">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                Task List
+            </a>
+        </div>
+    </nav>
 
-<body>
-    <div class="container">
-        <h1>TASK APP</h1>
-        @if (isset($task))
-            <form action="{{ url('/update') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id" value="{{ $task->id }}">
-                <div class="add-task">
-                    <input type="text" name="title" value="{{ $task->title }}" placeholder="Edit a task...">
-                    <button type="submit" class="add-btn">Update Task</button>
+    <div class="container mt-4">
+        <div class="offset-md-2 col-md-8">
+            <!-- New Task Form -->
+            <div class="card">
+                <div class="card-header">
+                    New Task
                 </div>
-            </form>
-        @else
-            <form action="create" method="POST">
-                @csrf
-                <div class="add-task">
-                    <input type="text" name="title" placeholder="Add a new task...">
-                    <button type="submit" class="add-btn">Add Task</button>
+                <div class="card-body">
+                    @if (isset($task))
+                        <form action="{{ url('/update') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $task->id }}">
+                            <div class="mb-3">
+                                <label for="task-name" class="form-label">Task</label>
+                                <input type="text" name="title" id="task-name" class="form-control" value="{{ $task->title }}">
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-plus me-2"></i>Update Task
+                                </button>
+                            </div>
+                        </form>
+                    @else
+                        <form action="create" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="task-name" class="form-label">Task</label>
+                                <input type="text" name="title" id="task-name" class="form-control" placeholder="Add a new task...">
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-plus me-2"></i>Add Task
+                                </button>
+                            </div>
+                        </form>
+                    @endif
                 </div>
-            </form>
-        @endif
+            </div>
 
-        <div class="tasks">
-            @foreach ($tasks as $task)
-                <div class="task">
-                    <span>{{ $task->title }}</span>
-                    <div class="task-actions">
-                        <form action="{{ url('/edit/' . $task->id) }}" method="GET" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="edit-btn">Edit</button>
-                        </form>
-                        <form action="/delete/{{ $task->id }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="delete-btn">Delete</button>
-                        </form>
-                    </div>
+            <!-- Current Tasks -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    Current Tasks
                 </div>
-            @endforeach
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($tasks as $task)
+                                <tr>
+                                    <td>{{ $task->title }}</td>
+                                    <td>
+                                        <form action="{{ url('/edit/' . $task->id) }}" method="GET" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-warning">
+                                                <i class="fa fa-edit me-2"></i>Edit
+                                            </button>
+                                        </form>
+                                        <form action="/delete/{{ $task->id }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fa fa-trash me-2"></i>Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-</body>
 
+    <!-- JavaScripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
