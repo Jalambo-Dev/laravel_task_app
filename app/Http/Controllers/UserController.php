@@ -3,61 +3,70 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = DB::table('users')->get();
+        $users = User::all();
         return view('users', compact('users'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $password = Hash::make($_POST['password']); // Hash the password
 
-        DB::table('users')->insert([
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = Hash::make($request->input('password'));
+
+
+        User::create([
             'name' => $name,
             'email' => $email,
             'password' => $password,
         ]);
+
         return redirect('/users');
     }
 
     public function delete($id)
     {
-        DB::table('users')->where('id', $id)->delete();
+
+        $user = User::find($id);
+        if ($user) {
+            $user->delete();
+        }
         return redirect('/users');
     }
 
     public function edit($id)
     {
-        $user = DB::table('users')->where('id', $id)->first();
-        $users = DB::table('users')->get();
+
+        $user = User::find($id);
+        $users = User::all();
         return view('users', compact('user', 'users'));
     }
 
-    public function update()
+    public function update(Request $request)
     {
-        $id = $_POST['id'];
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $password = $_POST['password'] ? Hash::make($_POST['password']) : null; // Update password only if provided
 
-        $updateData = [
-            'name' => $name,
-            'email' => $email,
-        ];
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password') ? Hash::make($request->input('password')) : null;
 
-        if ($password) {
-            $updateData['password'] = $password;
+        $user = User::find($id);
+        if ($user) {
+            $user->name = $name;
+            $user->email = $email;
+            if ($password) {
+                $user->password = $password;
+            }
+            $user->save();
         }
 
-        DB::table('users')->where('id', $id)->update($updateData);
         return redirect('/users');
     }
 }
